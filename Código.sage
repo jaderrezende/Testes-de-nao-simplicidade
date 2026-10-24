@@ -22,8 +22,8 @@ def teste1(N,L):
 def teste2(N,L):
     for p in L:
         for q in L[p][:]:
-            if q>4:
-                if factorial(q)/(2*N) < q:
+            if q>4: 
+                if factorial(q)/(2*N) < q and factorial(q)/(2*N) != 1:
                     L[p].remove(q)
     return L
 
@@ -111,7 +111,7 @@ def find(a,b):
     for N in range(a,b):
         if not teste(N):
             L.append(N)
-    print(L)
+    return L
 
     
   ##### Latex ####
@@ -184,5 +184,5 @@ def SylowList(Nmin, Nmax):
     
     return []
 
-find(1,1000)
+#print(find(1,1000))
 #SylowList(24,25)
