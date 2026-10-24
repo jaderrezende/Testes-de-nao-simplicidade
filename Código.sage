@@ -42,7 +42,7 @@ def normal_comp(N,L):
             N_p= N/q
             # Agora definiremos testes para provar P<Z(N(P))
             # primeiro critério
-            if not (p^3).divides(N_q) and not any([l for l in list(factor(N_p)) if l!=p and np(N_p)[l]!=[1]]):
+            if not (p^3).divides(N_p) and not any([l[0] for l in list(factor(N_p)) if l!=p and np(N_p)[l[0]]!=[1]]):
                 L[p].remove(q)
             #Quamdo eu fizer mais, ponho aqui
     return L
@@ -184,5 +184,5 @@ def SylowList(Nmin, Nmax):
     
     return []
 
-#find(1,1000)
+find(1,1000)
 #SylowList(24,25)
