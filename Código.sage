@@ -36,6 +36,16 @@ def teste3(N,L): # Exemplo de caso eliminado 336
                 L[p].remove(p+1)
     return L
 
+def normal_comp(N,L):
+    for p in L:
+        for q in L[p][:]:
+            N_p= N/q
+            # Agora definiremos testes para provar P<Z(N(P))
+            # primeiro critério
+            if not (p^3).divides(N_q) and not any([l for l in list(factor(N_p)) if l!=p and np(N_p)[l]!=[1]]):
+                L[p].remove(q)
+            #Quamdo eu fizer mais, ponho aqui
+    return L
 
 # Se, sob a hipótese de G ser simples, ao calcularmos uma cota para o tamanho dos Sylows e ela exceder o tamanho de G, temos um absurdo.
 def teste_cont(N,L):
@@ -87,6 +97,7 @@ def teste(N):
     L=teste1(N,L)
     L=teste2(N,L)
     L=teste3(N,L)
+    L=normal_comp(N,L)
     if any([len(L[p])==0 for p in L]):
         return True
         
