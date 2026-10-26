@@ -95,7 +95,11 @@ def teste_print(N):
     L=teste2(N,L)
     L=teste3(N,L)
     print(f"np={L}")
-    #print(f'N')
+    N_p= {}
+    for p in L:
+        for q in L[p]:
+            N_p[p]= factor(N/q)
+    print(f'N={N_p}')
     if any([len(L[p])==0 for p in L]):
         return
     teste_cont(N,L)
