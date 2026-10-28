@@ -22,8 +22,8 @@ def teste1(N,L):
 def teste2(N,L):
     for p in L:
         for q in L[p][:]:
-            if q>4:
-                if factorial(q)/(2*N) < q:
+            if q>4: 
+                if factorial(q)/(2*N) < q and factorial(q)/(2*N) != 1:
                     L[p].remove(q)
     return L
 
@@ -36,6 +36,20 @@ def teste3(N,L): # Exemplo de caso eliminado 336
                 L[p].remove(p+1)
     return L
 
+def normal_comp(N,L):
+    for p in L: 
+        for q in L[p][:]:
+            N_p= N/q
+            card_P= p**dict(factor(N))[p]
+            # Agora definiremos testes para provar P<Z(N(P))
+            # primeiro critério
+            if not (p^3).divides(N_p): #P é cíclico 
+                if not any([l[0] for l in list(factor(N_p)) if l!=p and np(N_p)[l[0]]!=[1]]): 
+                    L[p].remove(q)
+                 #Quando eu fizer mais, ponho aqui
+                if gcd(N_p,card_P)==1:
+                    L[p].remove(q)
+    return L
 
 # Se, sob a hipótese de G ser simples, ao calcularmos uma cota para o tamanho dos Sylows e ela exceder o tamanho de G, temos um absurdo.
 def teste_cont(N,L):
@@ -56,8 +70,6 @@ def teste_cont(N,L):
                 cpb= True
                 S[p]=[1]
 
-    print(f"posso contar {S}")
-    print(f"somam {sum((p**P[p]-1)*min(S[p]) for p in S)+1}")
     if sum((p**P[p]-1)*min(S[p]) for p in S)+1>N:
         return True
     elif cpb: #contando por baixo 
@@ -76,33 +88,110 @@ def teo_2n(N): # Se #G é par mas #G/2 é impar, G não é simples
         f=dict(factor(N))
         return f[2]==1
     
+def p_min_cy(N): # se P é um p-sylow, com p menor primo que divide N, P tem complemento normal. 
+    p=min(np(N))
+    return not p**3.divides(N)
 ######
-
-############## Calculando ##########
-def teste_print(N):
-    print(f'{N}={factor(N)}')
+        
+def teste(N):
     if N==1:
-        prin(":|")
-        return
+        return True
     if teo_pq_fraco(N):
-        print("p^a b")
-        return
+        return True
     if teo_2n(N):
-        print("2n")
-        return
+        return True
+    if p_min_cy(N):
+        return True 
     L=np(N)
     L=teste1(N,L)
     L=teste2(N,L)
     L=teste3(N,L)
-    print(f"np={L}")
-    N_p= {}
-    for p in L:
-        for q in L[p]:
-            N_p[p]= factor(N/q)
-    print(f'N={N_p}')
+    L=normal_comp(N,L)
     if any([len(L[p])==0 for p in L]):
-        return
-    teste_cont(N,L)
+        return True
+        
+    if teste_cont(N,L):
+        return True
+    return False
+        
     
+def find(a,b):
+    L=[]
+    for N in range(a,b):
+        if not teste(N):
+            L.append(N)
+    return L
+
     
-teste_print(288)
+  ##### Latex ####
+    
+
+def np_note(L):
+    t=''
+    for p in L:
+        # Transforma a lista em set e ajusta as chaves para o formato LaTeX
+        S = str(set(L[p])).replace('{', r'\{').replace('}', r'\}') 
+        t+=f'\\[n_{{{p}}}\\in {S} \\]'
+    return t
+    
+def teste1_note(N,L):
+    T='Note que:'
+    L_copia = {k: v[:] for k, v in L.items()} # Cópia para não destruir o L original
+    for p in L:
+        F= [q for q in L[p] if q not in teste1(N,L_copia)[p]] # fora
+        if len(F)!=0:
+            S = str(set(F)).replace('{', r'\{').replace('}', r'\}')
+            T+=f'\n\\[n_{{{p}}}\\notin {S} \\]\n'
+    return T+r'Pois teriamos $\dfrac{n_p (G)!}{2}< N$'
+
+
+def teste2_note(N,L):
+    T='Agora, veja que:' # Indentação corrigida aqui
+    L_copia = {k: v[:] for k, v in L.items()} # Cópia para não destruir o L original
+    for p in L:
+        F= [q for q in L[p] if q not in teste2(N,L_copia)[p]] # fora
+        if len(F)!=0:
+            S = str(set(F)).replace('{', r'\{').replace('}', r'\}')
+            T+=f'\\[n_{{{p}}}\\notin {S}\\]'
+    T+='Pois, teste 2'
+    return T+'Pois, teste 2'
+
+    
+def test_note(N):
+    T=f'\\section{{{N}}}'
+    if N==1:
+        return 'Trivial'
+    L=np(N)
+    T+='Primeiramente, usando os Teoremas de Sylow, listaremos os possíveis valores de np:'
+    T+=np_note(L)
+    T+=teste1_note(N,L)
+    L=teste1(N,L)
+    T+=teste2_note(N,L)
+    L=teste2(N,L)
+    if any([len(L[p])==0 for p in L]):
+        vazios = [p for p in L if len(L[p])==0]
+        S = str(set(vazios)).replace('{', r'\{').replace('}', r'\}')
+        return f'{T}\\\\ Logo, para qualquer valor de np, com $p\\in {S}$, G podemos concluir que não é simples'
+        
+    if teste3_note(N,L): # ainda não fiz
+        return True
+    return False
+    
+
+def SylowList(Nmin, Nmax):
+    with open('output.tex', 'w') as f:
+            print('\\documentclass{article}\n\\usepackage{amsmath,amssymb}\n\\usepackage{parskip}\n\\usepackage{color}\n\\usepackage[a4paper, margin=2.5cm]{geometry}\n\n\\begin{document}\n\n', file=f)
+    
+    for N in range(Nmin, Nmax):
+        s = test_note(N)
+        with open('output.tex', 'a') as f:
+            print(s, file=f)
+            print('\n\n', file=f)
+    
+    with open('output.tex', 'a') as f:
+            print('\\end{document}', file=f)
+    
+    return []
+
+#print(find(1,1000))
+#SylowList(24,25)
