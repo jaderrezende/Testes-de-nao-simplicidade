@@ -37,14 +37,14 @@ def teste3(N,L): # Exemplo de caso eliminado 336
     return L
 
 def normal_comp(N,L):
-    for p in L:
+    for p in L: 
         for q in L[p][:]:
             N_p= N/q
             # Agora definiremos testes para provar P<Z(N(P))
             # primeiro critério
             if not (p^3).divides(N_p) and not any([l[0] for l in list(factor(N_p)) if l!=p and np(N_p)[l[0]]!=[1]]):
                 L[p].remove(q)
-            #Quamdo eu fizer mais, ponho aqui
+            #Quando eu fizer mais, ponho aqui
     return L
 
 # Se, sob a hipótese de G ser simples, ao calcularmos uma cota para o tamanho dos Sylows e ela exceder o tamanho de G, temos um absurdo.
@@ -84,6 +84,9 @@ def teo_2n(N): # Se #G é par mas #G/2 é impar, G não é simples
         f=dict(factor(N))
         return f[2]==1
     
+def p_min_cy(N): # se P é um p-sylow, com p menor primo que divide N, P tem complemento normal. 
+    p=min(np(N))
+    return not p**3.divides(N)
 ######
         
 def teste(N):
@@ -93,6 +96,8 @@ def teste(N):
         return True
     if teo_2n(N):
         return True
+    if p_min_cy(N):
+        return True 
     L=np(N)
     L=teste1(N,L)
     L=teste2(N,L)
