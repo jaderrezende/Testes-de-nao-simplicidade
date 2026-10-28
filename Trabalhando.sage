@@ -46,7 +46,7 @@ def normal_comp(N,L):
                 if not any([l[0] for l in list(factor(N_p)) if l!=p and np(N_p)[l[0]]!=[1]]): 
                     L[p].remove(q)
                  #Quando eu fizer mais, ponho aqui
-                if gcd(N_p,p-1)==1:
+                elif gcd(N_p,p-1)==1:
                     L[p].remove(q)
     return L
 
