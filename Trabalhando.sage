@@ -45,9 +45,11 @@ def normal_comp(N,L):
             if not (p**2).divides(N_p): #P é cíclico 
                 if gcd(N_p/p,p-1)==1:
                     L[p].remove(q)
-                elif not (p**3).divides(N_p): #P é abeliano 
-                    if not any([l[0] for l in list(factor(N_p)) if l!=p and np(N_p)[l[0]]!=[1]]): 
+                    continue
+            if not (p**3).divides(N_p): #P é abeliano 
+                if not any([l[0] for l in list(factor(N_p)) if l!=p and np(N_p)[l[0]]!=[1]]): 
                         L[p].remove(q)
+                        continue
     return L
 
 # Se, sob a hipótese de G ser simples, ao calcularmos uma cota para o tamanho dos Sylows e ela exceder o tamanho de G, temos um absurdo.
@@ -192,5 +194,5 @@ def SylowList(Nmin, Nmax):
     
     return []
 
-#print(find(1,1000))
+#print(len(find(1,10000)))
 #SylowList(24,25) 
