@@ -46,7 +46,7 @@ def normal_comp(N,L):
                 if not any([l[0] for l in list(factor(N_p)) if l!=p and np(N_p)[l[0]]!=[1]]): 
                     L[p].remove(q)
                  #Quando eu fizer mais, ponho aqui
-            if not (p^2).divides(N_p): #P é cíclico 
+            if not (p**2).divides(N_p): #P é cíclico 
                 elif gcd(N_p/p,p-1)==1:
                     L[p].remove(q)
     return L
@@ -90,7 +90,7 @@ def teo_2n(N): # Se #G é par mas #G/2 é impar, G não é simples
     
 def p_min_cy(N): # se P é um p-sylow, com p menor primo que divide N, P tem complemento normal. 
     p=min(np(N))
-    return not p**3.divides(N)
+    return not p**2.divides(N)
 ######
         
 def teste(N):
