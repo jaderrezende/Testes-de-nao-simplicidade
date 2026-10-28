@@ -42,9 +42,17 @@ def normal_comp(N,L):
             N_p= N/q
             # Agora definiremos testes para provar P<Z(N(P))
             # primeiro critério
-            if not (p^3).divides(N_p) and not any([l[0] for l in list(factor(N_p)) if l!=p and np(N_p)[l[0]]!=[1]]):
-                L[p].remove(q)
-            #Quando eu fizer mais, ponho aqui
+            if not (p**2).divides(N_p): #P é cíclico 
+                if gcd(N_p/p,p-1)==1:
+                    L[p].remove(q)
+                    continue
+            if not (p**3).divides(N_p): #P é abeliano 
+                if not any([l[0] for l in list(factor(N_p)) if l!=p and np(N_p)[l[0]]!=[1]]): 
+                        L[p].remove(q)
+                        continue
+                if gcd(N_p/p,p-1)==1 and gcd(N_p,p+1)==1:
+                    L[p].remove(q)
+                    continue
     return L
 
 # Se, sob a hipótese de G ser simples, ao calcularmos uma cota para o tamanho dos Sylows e ela exceder o tamanho de G, temos um absurdo.
@@ -86,7 +94,7 @@ def teo_2n(N): # Se #G é par mas #G/2 é impar, G não é simples
     
 def p_min_cy(N): # se P é um p-sylow, com p menor primo que divide N, P tem complemento normal. 
     p=min(np(N))
-    return not p**3.divides(N)
+    return not p**2.divides(N)
 ######
         
 def teste(N):
@@ -189,5 +197,5 @@ def SylowList(Nmin, Nmax):
     
     return []
 
-#print(find(1,1000))
-#SylowList(24,25)
+#print(len(find(1,10000)))
+#SylowList(24,25) 
