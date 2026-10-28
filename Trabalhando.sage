@@ -42,10 +42,11 @@ def normal_comp(N,L):
             N_p= N/q
             # Agora definiremos testes para provar P<Z(N(P))
             # primeiro critério
-            if not (p^3).divides(N_p): #P é cíclico 
+            if not (p^3).divides(N_p): #P é abeliano 
                 if not any([l[0] for l in list(factor(N_p)) if l!=p and np(N_p)[l[0]]!=[1]]): 
                     L[p].remove(q)
                  #Quando eu fizer mais, ponho aqui
+            if not (p^2).divides(N_p): #P é cíclico 
                 elif gcd(N_p/p,p-1)==1:
                     L[p].remove(q)
     return L
