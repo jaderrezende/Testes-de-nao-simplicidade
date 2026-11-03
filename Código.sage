@@ -46,11 +46,11 @@ def normal_comp(N,L):
                 if gcd(N_p/p,p-1)==1:
                     L[p].remove(q)
                     continue
-            if not (p**3).divides(N_p): #P é abeliano 
+            elif not (p**3).divides(N_p): #P é abeliano 
                 if not any([l[0] for l in list(factor(N_p)) if l!=p and np(N_p)[l[0]]!=[1]]): 
                         L[p].remove(q)
                         continue
-                if gcd(N_p/p,p-1)==1 and gcd(N_p,p+1)==1:
+                if gcd(N_p/(p^2),p-1)==1 and gcd(N_p/(p^2),p+1)==1:
                     L[p].remove(q)
                     continue
     return L
